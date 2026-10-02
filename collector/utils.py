@@ -20,7 +20,7 @@ def get_client_ip(request):
     2. Else, if TRUSTED_PROXY_COUNT > 0, read X-Forwarded-For counting from the right.
     3. Else use REMOTE_ADDR.
     """
-        header = getattr(settings, "CLIENT_IP_HEADER", "")
+    header = getattr(settings, "CLIENT_IP_HEADER", "")
     if header:
         meta_key = "HTTP_" + header.upper().replace("-", "_")
         ip = _clean_ip(request.META.get(meta_key, ""))
@@ -39,6 +39,7 @@ def get_client_ip(request):
                 return ip
 
     return _clean_ip(remote) or "0.0.0.0"
+
 
 def is_rate_limited(ip):
     """Allow RATE_LIMIT_POSTS form posts per RATE_LIMIT_WINDOW seconds per IP."""
