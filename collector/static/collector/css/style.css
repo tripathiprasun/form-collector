@@ -1,0 +1,85 @@
+:root {
+  --text: #1a1a1a;
+  --muted: #555;
+  --line: #8a8a8a;
+  --error: #a40000;
+  --focus: #1a56db;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--text);
+  font: 1rem/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+main {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+h1 { font-size: 1.5rem; font-weight: 600; margin: 0 0 0.75rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--focus); }
+
+.field { margin: 0 0 1.25rem; }
+
+label, legend { display: block; font-weight: 600; margin-bottom: 0.25rem; padding: 0; }
+.optional { font-weight: 400; color: var(--muted); }
+.hint { margin: 0 0 0.35rem; font-size: 0.9rem; color: var(--muted); }
+
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+fieldset label { font-weight: 400; margin: 0.15rem 0; }
+fieldset input { margin-right: 0.4rem; }
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  font: inherit;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: #fff;
+  color: inherit;
+}
+
+textarea { resize: vertical; }
+[aria-invalid="true"] { border-color: var(--error); }
+
+input:focus-visible, select:focus-visible, textarea:focus-visible,
+button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.error { color: var(--error); margin: 0.3rem 0 0; font-size: 0.95rem; }
+
+button {
+  font: inherit;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background: #1a1a1a;
+  color: #fff;
+  cursor: pointer;
+}
+button:hover { background: #000; }
+button:disabled { opacity: 0.6; cursor: default; }
+
+.notice {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Honeypot: off-screen rather than display:none, so bots still fill it in */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

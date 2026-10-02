@@ -1,0 +1,46 @@
+{% extends "collector/base.html" %}
+{% block title %}{{ form_obj.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ form_obj.title }}</h1>
+{% if form_obj.description %}<p>{{ form_obj.description|linebreaksbr }}</p>{% endif %}
+
+<form method="post" id="response-form" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <p class="error" role="alert">{{ form.non_field_errors.0 }}</p>
+  {% endif %}
+
+  {% for field in form %}
+    {% if field.name != "website" %}
+      <div class="field">
+        {% if field.widget_type == "radioselect" or field.widget_type == "checkboxselectmultiple" %}
+          <fieldset>
+            <legend>{{ field.label }}{% if not field.field.required %} <span class="optional">(optional)</span>{% endif %}</legend>
+            {% if field.help_text %}<p class="hint">{{ field.help_text }}</p>{% endif %}
+            {{ field }}
+          </fieldset>
+        {% else %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="optional">(optional)</span>{% endif %}</label>
+          {% if field.help_text %}<p class="hint">{{ field.help_text }}</p>{% endif %}
+          {{ field }}
+        {% endif %}
+        {% if field.errors %}<p class="error" role="alert">{{ field.errors.0 }}</p>{% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="hp" aria-hidden="true">
+    <label for="{{ form.website.id_for_label }}">{{ form.website.label }}</label>
+    {{ form.website }}
+  </div>
+
+  <button type="submit">Submit</button>
+</form>
+
+<p class="notice">
+  This form saves your answers and the time you submit{% if form_obj.collect_ip %}, plus the IP address your device used to reach this page{% endif %}.
+  Only the person who made the form can see them.
+</p>
+{% endblock %}
