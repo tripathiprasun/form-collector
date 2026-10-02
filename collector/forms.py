@@ -113,7 +113,7 @@ class FillForm(forms.Form):
                 self.add_error(uq.key, DUPLICATE_MESSAGE)
         return cleaned
 
-    def build_response(self, ip):
+    def build_response(self):
         data = {}
         dedupe_key = None
         for q in self.questions:
@@ -124,6 +124,5 @@ class FillForm(forms.Form):
         return Response(
             form=self.form_obj,
             data=data,
-            ip_address=ip if self.form_obj.collect_ip else None,
             dedupe_key=dedupe_key,
         )

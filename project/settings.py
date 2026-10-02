@@ -60,6 +60,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "collector.middleware.SecurityHeadersMiddleware",
+    "collector.middleware.AdminLoginThrottleMiddleware",
 ]
 
 ROOT_URLCONF = "project.urls"
@@ -121,8 +123,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- App settings ---
 ADMIN_URL = os.environ.get("ADMIN_URL", "admin/")
-TRUSTED_PROXY_COUNT = int(os.environ.get("TRUSTED_PROXY_COUNT", "0"))
-RATE_LIMIT_POSTS = int(os.environ.get("RATE_LIMIT_POSTS", "10"))
+RATE_LIMIT_POSTS = int(os.environ.get("RATE_LIMIT_POSTS", "120"))
 RATE_LIMIT_WINDOW = int(os.environ.get("RATE_LIMIT_WINDOW", "60"))
 
 CSRF_FAILURE_VIEW = "collector.views.csrf_failure"
@@ -137,6 +138,11 @@ CACHES = {
 # --- Security ---
 SECURE_REFERRER_POLICY = "same-origin"
 X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SESSION_COOKIE_AGE = 60 * 60 * 8  # admin sessions last 8 hours
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

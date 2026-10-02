@@ -83,3 +83,12 @@ button:disabled { opacity: 0.6; cursor: default; }
 
 /* Honeypot: off-screen rather than display:none, so bots still fill it in */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.credit {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 2rem;
+  font-size: 0.75rem;
+  color: #999;
+}
+.credit a { color: inherit; }

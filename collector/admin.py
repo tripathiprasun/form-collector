@@ -22,13 +22,11 @@ class FormAdminForm(forms.ModelForm):
             "description": "Intro text",
             "confirmation_message": "Message after submitting",
             "is_open": "Accepting responses",
-            "collect_ip": "Record each submitter's IP address",
         }
         help_texts = {
             "slug": "Used in the link: /f/<link name>/. Changing it breaks links you already sent.",
             "description": "Shown above the questions. Optional.",
             "is_open": "Untick to close the form. People opening the link will see that it is closed.",
-            "collect_ip": "The IP is read by the server, never typed in by the person. The form tells people it is recorded.",
         }
 
 
@@ -92,7 +90,7 @@ class FormAdmin(admin.ModelAdmin):
     readonly_fields = ("share_link", "responses_link")
     fieldsets = (
         (None, {"fields": ("title", "description", "slug", "share_link", "confirmation_message")}),
-        ("Settings", {"fields": ("is_open", "collect_ip", "responses_link")}),
+        ("Settings", {"fields": ("is_open", "responses_link")}),
     )
 
     def get_queryset(self, request):
@@ -130,12 +128,12 @@ class FormAdmin(admin.ModelAdmin):
 
 @admin.register(Response)
 class ResponseAdmin(admin.ModelAdmin):
-    list_display = ("id", "form", "preview", "ip_address", "submitted")
+    list_display = ("id", "form", "preview", "submitted")
     list_filter = ("form", "submitted_at")
-    search_fields = ("dedupe_key", "ip_address", "form__title")
+    search_fields = ("dedupe_key", "form__title")
     date_hierarchy = "submitted_at"
     ordering = ("-submitted_at",)
-    fields = ("form", "answers_table", "ip_address", "submitted")
+    fields = ("form", "answers_table", "submitted")
     readonly_fields = fields
     actions = ["export_selected_csv"]
 

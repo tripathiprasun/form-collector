@@ -30,7 +30,6 @@ class Form(models.Model):
         max_length=300, default="Your response has been recorded."
     )
     is_open = models.BooleanField(default=True)
-    collect_ip = models.BooleanField(default=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
@@ -90,7 +89,6 @@ class Question(models.Model):
 class Response(models.Model):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, related_name="responses")
     data = models.JSONField(default=dict)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
     dedupe_key = models.CharField(max_length=320, null=True, blank=True, editable=False)
     submitted_at = models.DateTimeField(auto_now_add=True)
 

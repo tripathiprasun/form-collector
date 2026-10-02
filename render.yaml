@@ -22,8 +22,8 @@ services:
         fromDatabase:
           name: form-collector-db
           property: connectionString
-      - key: TRUSTED_PROXY_COUNT
-        value: "1"
+      - key: ADMIN_URL
+        sync: false
       - key: DJANGO_SUPERUSER_USERNAME
         sync: false
       - key: DJANGO_SUPERUSER_EMAIL

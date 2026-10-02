@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 from .exports import csv_response
 from .forms import DUPLICATE_MESSAGE, FillForm
 from .models import Form
-from .utils import get_client_ip, is_rate_limited
+from .utils import is_rate_limited
 
 logger = logging.getLogger(__name__)
 
@@ -34,13 +34,11 @@ def fill(request, slug):
         return render(request, "collector/closed.html", {"form_obj": form_obj})
 
     if request.method == "POST":
-        ip = get_client_ip(request)
-
-        if is_rate_limited(ip):
+        if is_rate_limited():
             return _error_page(
                 request,
                 "Too many attempts",
-                "Please wait a minute and try again.",
+                "The form is very busy right now. Please wait a minute and try again.",
                 429,
             )
 
@@ -49,7 +47,7 @@ def fill(request, slug):
             if form.cleaned_data.get("website"):
                 return redirect("done", slug=slug)  # honeypot tripped; pretend it worked
 
-            response = form.build_response(ip)
+            response = form.build_response()
             try:
                 with transaction.atomic():
                     response.save()
