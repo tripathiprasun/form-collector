@@ -15,23 +15,30 @@ def get_client_ip(request):
     """
     Return the client IP as seen by the server.
 
-    X-Forwarded-For is only used when TRUSTED_PROXY_COUNT > 0, and then only the
-    entry added by your own proxies is read (counting from the right). Anything the
-    client puts at the left of the header is ignored.
+    1. If CLIENT_IP_HEADER is set (e.g. CF-Connecting-IP on Render), use that header.
+       Only safe when your host's proxy always sets/overwrites it.
+    2. Else, if TRUSTED_PROXY_COUNT > 0, read X-Forwarded-For counting from the right.
+    3. Else use REMOTE_ADDR.
     """
+    header = settings.CLIENT_IP_HEADER
+    if header:
+        meta_key = "HTTP_" + header.upper().replace("-", "_")
+        ip = _clean_ip(request.META.get(meta_key, ""))
+        if ip:
+            return ip
+
     remote = request.META.get("REMOTE_ADDR", "")
     proxies = settings.TRUSTED_PROXY_COUNT
 
     if proxies > 0:
-        header = request.META.get("HTTP_X_FORWARDED_FOR", "")
-        parts = [p.strip() for p in header.split(",") if p.strip()]
+        forwarded = request.META.get("HTTP_X_FORWARDED_FOR", "")
+        parts = [p.strip() for p in forwarded.split(",") if p.strip()]
         if len(parts) >= proxies:
             ip = _clean_ip(parts[-proxies])
             if ip:
                 return ip
 
     return _clean_ip(remote) or "0.0.0.0"
-
 
 def is_rate_limited(ip):
     """Allow RATE_LIMIT_POSTS form posts per RATE_LIMIT_WINDOW seconds per IP."""
